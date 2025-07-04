@@ -55,24 +55,21 @@ class PostsRepoImpl implements PostRepository {
       await remoteDataSource.addPost(post);
       hiveServices.clearPostsData(postsBox);
       final newPostsList = await fetchPosts();
-    return newPostsList.fold(
+      return newPostsList.fold(
         (faliure) {
           return left(faliure);
         },
         (newPostsList) {
           return right(newPostsList);
 
-      // return right(r);
+          // return right(r);
         },
       );
-      
     } on DioException catch (e) {
       return left(ServerFailure.fromDiorError(e));
     } catch (e) {
       return left(ServerFailure(e.toString()));
     }
-
-
   }
 
   @override

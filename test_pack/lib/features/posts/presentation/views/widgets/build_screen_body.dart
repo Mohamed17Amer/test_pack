@@ -38,9 +38,9 @@ class BuildPostsScreenBody extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is FeaturedPostsSuccess) {
-          return BuildFetchSuccess(posts: posts);
+          return BuildFetchSuccess(posts: state.posts);
         } else if (state is AddPostSuccess) {
-          return BuildFetchSuccess(posts: posts);
+          return BuildFetchSuccess(posts: state.posts);
         } else if (state is FeaturedPostsFailure) {
           return Text(state.errMessage);
         } else if (state is DeletePostSuccess) {
