@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_pack/features/posts/domain/entities/post_entity.dart';
 import 'package:test_pack/features/posts/presentation/manager/cubit/posts_cubit.dart';
-import 'package:test_pack/features/posts/presentation/views/widgets/build_delete_success.dart';
 import 'package:test_pack/features/posts/presentation/views/widgets/build_fetch_success.dart';
 
 class BuildPostsScreenBody extends StatelessWidget {
@@ -28,6 +27,7 @@ class BuildPostsScreenBody extends StatelessWidget {
 
         if (state is DeletePostFailure) {}
         if (state is DeletePostSuccess) {
+          posts.clear();
           posts.addAll(state.posts);
         }
 
@@ -41,10 +41,10 @@ class BuildPostsScreenBody extends StatelessWidget {
           return BuildFetchSuccess(posts: state.posts);
         } else if (state is AddPostSuccess) {
           return BuildFetchSuccess(posts: state.posts);
+        } else if (state is DeletePostSuccess) {
+          return BuildFetchSuccess(posts: state.posts);
         } else if (state is FeaturedPostsFailure) {
           return Text(state.errMessage);
-        } else if (state is DeletePostSuccess) {
-          return BuildDeleteSuccess(posts: posts);
         } else if (state is UpdatePostSuccess) {
           return BuildFetchSuccess(posts: posts);
         } else {

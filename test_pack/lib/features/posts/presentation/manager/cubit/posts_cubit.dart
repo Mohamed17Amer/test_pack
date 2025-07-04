@@ -36,7 +36,7 @@ class PostsCubit extends Cubit<PostsState> {
   }
 
   Future<void> deletePost(int postId) async {
-  emit(LoadingDeletePostState());
+  emit(LoadingPostsState());
   var result = await deletePostUsecase.call(postId);
   result.fold((failure) {
     emit(DeletePostFailure(failure.message));
