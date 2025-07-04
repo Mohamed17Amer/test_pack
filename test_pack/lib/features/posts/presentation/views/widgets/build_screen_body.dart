@@ -13,25 +13,24 @@ class BuildPostsScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostsCubit, PostsState>(
-      listener: (context, state) async{
-        if (state is DeletePostFailure) {}
-        if (state is DeletePostSuccess) {
-          posts.addAll(state.posts);
-        }
+      listener: (context, state) async {
         if (state is FeaturedPostsFailure) {}
         if (state is FeaturedPostsSuccess) {
           posts.clear();
           posts.addAll(state.posts);
-          log( 'posts: ${posts.length}');
-          log( 'posts: ${posts[0].title}');
         }
-        if (state is UpdatePostSuccess){
-           await context.read<PostsCubit>().fetchtPosts();
+        if (state is DeletePostFailure) {}
+        if (state is DeletePostSuccess) {
+          posts.addAll(state.posts);
+        }
+
+        if (state is UpdatePostSuccess) {
+          await context.read<PostsCubit>().fetchtPosts();
         }
         if (state is UpdatePostFailure) {}
-        if (state is AddPostSuccess){
+        if (state is AddPostSuccess) {
           await context.read<PostsCubit>().fetchtPosts();
-       }
+        }
         if (state is AddPostFailure) {}
       },
       builder: (context, state) {
@@ -41,10 +40,9 @@ class BuildPostsScreenBody extends StatelessWidget {
           return Text(state.errMessage);
         } else if (state is DeletePostSuccess) {
           return BuildDeleteSuccess(posts: posts);
-        } else if(state is UpdatePostSuccess) {
+        } else if (state is UpdatePostSuccess) {
           return BuildFetchSuccess(posts: posts);
-        }
-        else {
+        } else {
           return const CircularProgressIndicator();
         }
       },

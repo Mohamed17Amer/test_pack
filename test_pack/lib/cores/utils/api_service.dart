@@ -28,10 +28,7 @@ class ApiService {
     return response.data;
   }
 
-  List<PostEntity> getDataList({
-    required List<dynamic> data,
-    required itemKey,
-  }) {
+  List<PostEntity> getDataList({required List<dynamic> data, itemKey}) {
     List<PostEntity> dataList = [];
     for (var itemMap in data) {
       dataList.add(PostModel.fromJson(itemMap));
@@ -91,9 +88,9 @@ class ApiService {
     log("on update  ${response.data} ");
     return PostModel.fromJson(response.data);
   }
+
   Future<void> addPost(PostEntity post) async {
     final response = await _dio.post("$baseUrl/posts", data: post);
     log("on addition ${response.data}");
-}
-
+  }
 }

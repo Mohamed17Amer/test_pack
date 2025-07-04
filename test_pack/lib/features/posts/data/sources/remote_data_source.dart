@@ -22,22 +22,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   final ApiService apiService;
   final HiveServices hiveServices;
   RemoteDataSourceImpl(this.apiService, this.hiveServices);
+
   @override
   Future<List<PostEntity>> fetchPosts() async {
     var data = await apiService.get(endPoint: 'posts');
-
-    List<PostEntity> posts = apiService.getDataList(
-      data: data,
-      itemKey: "items",
-    );
-
-    hiveServices.clearPostsData(postsBox);
-    hiveServices.savePostsData(posts, postsBox);
+    List<PostEntity> posts = apiService.getDataList(data: data);
     return posts;
   }
-  // get response.data as Map<String, dynamic>,
-  // it contains a list of books in 'items' key
-  // convert to List<BookEntity>
+
 
   @override
   Future<Unit> deletePost(int id) {
@@ -49,7 +41,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<Unit> updatePost(PostEntity post) async {
-       await apiService.updatePost(post);
+    await apiService.updatePost(post);
     hiveServices.clearPostsData(postsBox);
     /*
     var box = Hive.box<PostEntity>(postsBox);
@@ -67,7 +59,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<Unit> addPost(PostEntity post) async{
+  Future<Unit> addPost(PostEntity post) async {
     await apiService.addPost(post);
     return Future.value(unit);
   }
