@@ -50,15 +50,29 @@ class PostsRepoImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> addPost(PostEntity post) async {
+  Future<Either<Failure, List<PostEntity>>> addPost(PostEntity post) async {
     try {
       await remoteDataSource.addPost(post);
-      return right(unit);
+      hiveServices.clearPostsData(postsBox);
+      final newPostsList = await fetchPosts();
+    return newPostsList.fold(
+        (faliure) {
+          return left(faliure);
+        },
+        (newPostsList) {
+          return right(newPostsList);
+
+      // return right(r);
+        },
+      );
+      
     } on DioException catch (e) {
       return left(ServerFailure.fromDiorError(e));
     } catch (e) {
       return left(ServerFailure(e.toString()));
     }
+
+
   }
 
   @override

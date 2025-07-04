@@ -10,7 +10,7 @@ class AddPostUsecase {
 
   AddPostUsecase(this.repository);
 
-  Future<Either<Failure, Unit>> call(PostEntity post) async {
+  Future<Either<Failure, List<PostEntity>>> call(PostEntity post) async {
     return await repository.addPost(post);
   }
 }

@@ -30,6 +30,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return posts;
   }
 
+  @override
+  Future<Unit> addPost(PostEntity post) async {
+    await apiService.addPost(post);
+    return Future.value(unit);
+  }
 
   @override
   Future<Unit> deletePost(int id) {
@@ -58,9 +63,5 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     return Future.value(unit);
   }
 
-  @override
-  Future<Unit> addPost(PostEntity post) async {
-    await apiService.addPost(post);
-    return Future.value(unit);
-  }
+
 }

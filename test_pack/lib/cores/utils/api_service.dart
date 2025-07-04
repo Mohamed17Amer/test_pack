@@ -37,40 +37,12 @@ class ApiService {
     return dataList;
   }
 
-  // Future<Map<String, dynamic>> get({required String endPoint}) async {
-  //   var response = await _dio.get(
-  //     '$baseUrl$endPoint',
-  //     options: Options(
-  //       headers: {
-  //         'User-Agent':
-  //             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-  //         'Accept':
-  //             'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  //       },
-  //     ),
-  //   );
-  //   log(response.data.toString());
-  //   return response.data;
-  // }
-
-  // // get response.data as Map<String, dynamic>,
-  // // it contains a list of books in 'items' key
-  // // convert to List<BookEntity>
-
-  // List<PostEntity> getDataList({
-  //   required Map<String, dynamic> data,
-  //   required itemKey,
-  // }) {
-  //   //List<PostEntity>
-
-  //   List<PostEntity> dataList = []; // List<Entity>
-  //   for (var itemMap in data[itemKey]) {
-  //     dataList.add(PostModel.fromJson(itemMap));
-  //   }
-  //   log(dataList.toString());
-  //   return dataList;
-  // }
-  // */
+  
+  Future<void> addPost(PostEntity post) async {
+    final response = await _dio.post("$baseUrl/posts", data: post);
+    log("on addition ${response.data}");
+  }
+  
 
   void deletePosst(int id) async {
     final response = await _dio.delete(
@@ -89,8 +61,4 @@ class ApiService {
     return PostModel.fromJson(response.data);
   }
 
-  Future<void> addPost(PostEntity post) async {
-    final response = await _dio.post("$baseUrl/posts", data: post);
-    log("on addition ${response.data}");
-  }
 }

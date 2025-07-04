@@ -16,7 +16,6 @@ class FeaturedPostsFailure extends PostsState {
   FeaturedPostsFailure(this.errMessage);
 }
 
-
 class DeletePostSuccess extends PostsState {
   final List<PostEntity> posts;
   DeletePostSuccess(this.posts);
@@ -39,7 +38,10 @@ class UpdatePostFailure extends PostsState {
   UpdatePostFailure(this.message);
 }
 
-class AddPostSuccess extends PostsState {}
+class AddPostSuccess extends PostsState {
+  final List<PostEntity> posts;
+  AddPostSuccess(this.posts);
+}
 
 class AddPostFailure extends PostsState {
   final String message;

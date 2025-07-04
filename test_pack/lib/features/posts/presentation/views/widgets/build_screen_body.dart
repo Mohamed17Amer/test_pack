@@ -19,6 +19,13 @@ class BuildPostsScreenBody extends StatelessWidget {
           posts.clear();
           posts.addAll(state.posts);
         }
+
+        if (state is AddPostFailure) {}
+        if (state is AddPostSuccess) {
+          posts.clear();
+          posts.addAll(state.posts);
+        }
+
         if (state is DeletePostFailure) {}
         if (state is DeletePostSuccess) {
           posts.addAll(state.posts);
@@ -28,13 +35,11 @@ class BuildPostsScreenBody extends StatelessWidget {
           await context.read<PostsCubit>().fetchtPosts();
         }
         if (state is UpdatePostFailure) {}
-        if (state is AddPostSuccess) {
-          await context.read<PostsCubit>().fetchtPosts();
-        }
-        if (state is AddPostFailure) {}
       },
       builder: (context, state) {
         if (state is FeaturedPostsSuccess) {
+          return BuildFetchSuccess(posts: posts);
+        } else if (state is AddPostSuccess) {
           return BuildFetchSuccess(posts: posts);
         } else if (state is FeaturedPostsFailure) {
           return Text(state.errMessage);

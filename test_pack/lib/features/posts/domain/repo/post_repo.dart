@@ -6,5 +6,5 @@ abstract class PostRepository {
   Future<Either<Failure, List<PostEntity>>> fetchPosts();
   Future<Either<Failure, List<PostEntity>>> deletePost(int id);
   Future<Either<Failure, Unit>> updatePost(PostEntity post);
-  Future<Either<Failure, Unit>> addPost(PostEntity post);
+  Future<Either<Failure, List<PostEntity>>> addPost(PostEntity post);
 }

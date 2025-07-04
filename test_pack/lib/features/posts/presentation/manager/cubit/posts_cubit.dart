@@ -25,6 +25,16 @@ class PostsCubit extends Cubit<PostsState> {
     });
   }
 
+   Future<void> addPost(PostEntity post) async {
+    emit(LoadingPostsState());
+   var result=  await addPostUsecase.call(post);
+   result.fold((failure) {
+      emit(AddPostFailure(failure.message));
+    }, (postsList) {
+      emit(AddPostSuccess(postsList));
+    });
+  }
+
   Future<void> deletePost(int postId) async {
   emit(LoadingDeletePostState());
   var result = await deletePostUsecase.call(postId);
@@ -45,15 +55,7 @@ class PostsCubit extends Cubit<PostsState> {
     });
   }
 
-  Future<void> addPost(PostEntity post) async {
-    emit(LoadingPostsState());
-   var result=  await addPostUsecase.call(post);
-   result.fold((failure) {
-      emit(AddPostFailure(failure.message));
-    }, (postsList) {
-      emit(AddPostSuccess());
-    });
-  }
+ 
 
 
 
