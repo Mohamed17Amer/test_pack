@@ -9,7 +9,7 @@ import 'package:test_pack/features/posts/presentation/views/widgets/build_fetch_
 
 class BuildPostsScreenBody extends StatelessWidget {
   BuildPostsScreenBody({super.key});
-  List<PostEntity> posts = [PostEntity(body: "H", title: "H",id: 105)];
+  List<PostEntity> posts = [];
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostsCubit, PostsState>(
