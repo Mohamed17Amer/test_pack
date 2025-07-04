@@ -93,6 +93,7 @@ class ApiService {
   }
   Future<void> addPost(PostEntity post) async {
     final response = await _dio.post("$baseUrl/posts", data: post);
+    log("on addition ${response.data}");
 }
 
 }

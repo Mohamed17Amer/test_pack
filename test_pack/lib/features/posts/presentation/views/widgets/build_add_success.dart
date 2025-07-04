@@ -6,7 +6,7 @@ import 'package:test_pack/features/posts/domain/entities/post_entity.dart';
 import 'package:test_pack/features/posts/presentation/manager/cubit/posts_cubit.dart';
 
 class BuildAddSuccess extends StatefulWidget {
-   BuildAddSuccess({super.key});
+   const BuildAddSuccess({super.key});
 
   @override
   State<BuildAddSuccess> createState() => _BuildAddSuccessState();

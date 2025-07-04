@@ -54,6 +54,7 @@ class _BuildUpdateSuccessState extends State<BuildUpdateSuccess> {
                 onPressed: () async {
                   await context.read<PostsCubit>().updatePost(widget.post);
                   //await context.read<PostsCubit>().fetchtPosts();
+                  
                   context.push(AppRouter.kFetchView);
                 },
                 icon: const Icon(Icons.update, color: Colors.red),

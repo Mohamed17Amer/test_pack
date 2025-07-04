@@ -21,7 +21,7 @@ void main() async {
   Hive.registerAdapter(PostEntityAdapter());
   setupServiceLocator();
 
-  await Hive.openBox<PostEntity>(KPostsBox);
+  await Hive.openBox<PostEntity>(postsBox);
   Bloc.observer = SimpleBlocObserver();
 
   runApp(const MyApp());

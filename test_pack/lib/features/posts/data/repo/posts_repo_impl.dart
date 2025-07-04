@@ -65,7 +65,7 @@ class PostsRepoImpl implements PostRepository {
   @override
   Future<Either<Failure, Unit>> updatePost(PostEntity post) async {
     try {
-      final updatedPost = await remoteDataSource.updatePost(post);
+       await remoteDataSource.updatePost(post);
      
 
       return right(unit);

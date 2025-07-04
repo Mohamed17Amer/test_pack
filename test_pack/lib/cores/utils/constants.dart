@@ -1,1 +1,1 @@
-String KPostsBox =  "posts_box";
+ const String   postsBox =  "posts_box";

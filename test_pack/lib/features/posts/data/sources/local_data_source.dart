@@ -12,7 +12,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   LocalDataSourceImpl(this.hiveServices);
   @override
   List<PostEntity> fetchPosts() {
-    var box = Hive.box<PostEntity>(KPostsBox);
+    var box = Hive.box<PostEntity>(postsBox);
     int length = box.values.length;
     if (length == 0) {
       return [];

@@ -4,7 +4,7 @@ import 'package:test_pack/features/posts/presentation/manager/cubit/posts_cubit.
 import 'package:test_pack/features/posts/presentation/views/screens/update_posts_screen.dart';
 
 class BuildFetchSuccess extends StatelessWidget {
-   BuildFetchSuccess( {super.key, required this.posts});
+   const BuildFetchSuccess( {super.key, required this.posts});
   final List? posts;
   @override
   Widget build(BuildContext context) {

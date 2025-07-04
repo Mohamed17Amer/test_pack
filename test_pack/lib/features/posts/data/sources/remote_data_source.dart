@@ -31,8 +31,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       itemKey: "items",
     );
 
-    hiveServices.clearPostsData(KPostsBox);
-    hiveServices.savePostsData(posts, KPostsBox);
+    hiveServices.clearPostsData(postsBox);
+    hiveServices.savePostsData(posts, postsBox);
     return posts;
   }
   // get response.data as Map<String, dynamic>,
@@ -42,17 +42,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Unit> deletePost(int id) {
     apiService.deletePosst(id);
-    hiveServices.clearPostsData(KPostsBox);
+    hiveServices.clearPostsData(postsBox);
 
     return Future.value(unit);
   }
 
   @override
   Future<Unit> updatePost(PostEntity post) async {
-    final updatedPost = await apiService.updatePost(post);
-    hiveServices.clearPostsData(KPostsBox);
+       await apiService.updatePost(post);
+    hiveServices.clearPostsData(postsBox);
     /*
-    var box = Hive.box<PostEntity>(KPostsBox);
+    var box = Hive.box<PostEntity>(postsBox);
       var postsList = box.values.toList();
       int currentIndex = postsList.indexWhere(
         (element) => element.id == post.id,
@@ -60,8 +60,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       postsList.removeWhere((element) => element.id == post.id);
       postsList.insert(currentIndex, updatedPost);
       */
-    //hiveServices.clearPostsData(KPostsBox);
-    // hiveServices.savePostsData(postsList, KPostsBox);
+    //hiveServices.clearPostsData(postsBox);
+    // hiveServices.savePostsData(postsList, postsBox);
 
     return Future.value(unit);
   }
