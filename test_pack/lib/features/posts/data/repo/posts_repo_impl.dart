@@ -77,17 +77,15 @@ class PostsRepoImpl implements PostRepository {
     try {
       await remoteDataSource.fetchPosts();
       hiveServices.clearPostsData(postsBox);
-       final newPostsList = await fetchPosts();
+      final newPostsList = await fetchPosts();
       return newPostsList.fold(
         (faliure) {
           return left(faliure);
         },
         (newPostsList) {
           return right(newPostsList);
-
         },
       );
-
     } on DioException catch (e) {
       return left(ServerFailure.fromDiorError(e));
     } catch (e) {
@@ -96,11 +94,19 @@ class PostsRepoImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updatePost(PostEntity post) async {
+  Future<Either<Failure, List<PostEntity>>> updatePost(PostEntity post) async {
     try {
       await remoteDataSource.updatePost(post);
-
-      return right(unit);
+      hiveServices.clearPostsData(postsBox);
+      final newPostsList = await fetchPosts();
+      return newPostsList.fold(
+        (faliure) {
+          return left(faliure);
+        },
+        (newPostsList) {
+          return right(newPostsList);
+        },
+      );
     } on DioException catch (e) {
       return left(ServerFailure.fromDiorError(e));
     } catch (e) {

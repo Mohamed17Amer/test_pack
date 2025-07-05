@@ -36,15 +36,12 @@ class DeletePostFailure extends PostsState {
   DeletePostFailure(this.message);
 }
 
-
 class UpdatePostSuccess extends PostsState {
-  //final List<PostEntity> posts;
-  //UpdatePostSuccess(this.posts);
+  final List<PostEntity> posts;
+  UpdatePostSuccess(this.posts);
 }
 
 class UpdatePostFailure extends PostsState {
   final String message;
   UpdatePostFailure(this.message);
 }
-
-

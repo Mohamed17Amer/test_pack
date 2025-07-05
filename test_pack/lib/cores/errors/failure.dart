@@ -21,9 +21,9 @@ class ServerFailure extends Failure {
       case DioExceptionType.badCertificate:
         return ServerFailure('badCertificate with api server');
       case DioExceptionType.badResponse:
-        return  ServerFailure('badCertificate with api server222');
-        /*ServerFailure.fromResponse(
-            e.response!.statusCode!, e.response!.data);*/
+        return  //ServerFailure('badCertificate with api server222');
+        ServerFailure.fromResponse(
+            e.response!.statusCode!, e.response!.data);
       case DioExceptionType.cancel:
         return ServerFailure('Request to ApiServer was canceld');
       case DioExceptionType.connectionError:
@@ -32,7 +32,7 @@ class ServerFailure extends Failure {
         return ServerFailure('Opps There was an Error, Please try again');
     }
   }
-/*
+
   factory ServerFailure.fromResponse(int statusCode, dynamic response) {
     if (statusCode == 404) {
       return ServerFailure('Your request was not found, please try later');
@@ -46,5 +46,5 @@ class ServerFailure extends Failure {
 
 
   }
-*/
+
 }

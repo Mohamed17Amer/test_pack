@@ -39,27 +39,12 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Unit> deletePost(int id) {
     apiService.deletePosst(id);
-    hiveServices.clearPostsData(postsBox);
-
     return Future.value(unit);
   }
 
   @override
   Future<Unit> updatePost(PostEntity post) async {
     await apiService.updatePost(post);
-    hiveServices.clearPostsData(postsBox);
-    /*
-    var box = Hive.box<PostEntity>(postsBox);
-      var postsList = box.values.toList();
-      int currentIndex = postsList.indexWhere(
-        (element) => element.id == post.id,
-      );
-      postsList.removeWhere((element) => element.id == post.id);
-      postsList.insert(currentIndex, updatedPost);
-      */
-    //hiveServices.clearPostsData(postsBox);
-    // hiveServices.savePostsData(postsList, postsBox);
-
     return Future.value(unit);
   }
 

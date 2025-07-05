@@ -27,42 +27,43 @@ class _BuildUpdateSuccessState extends State<BuildUpdateSuccess> {
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<PostsCubit, PostsState>(
-        listener: (context, state) {
-          if (state is UpdatePostSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Post updated successfully')),
-            );
-          }
-        },
-        builder: (context, state) {
-            return ListTile(
-              title: TextFormField(
-                controller: titleController,
-                style: const TextStyle(color: Colors.red),
-                onChanged: (value) {
-                  widget.post.title = value;
-                },
-              ),
-              subtitle: TextFormField(
-                controller: bodyController,
-                onChanged: (value) {
-                  widget.post.body = value;
-                },
-              ),
-              trailing: IconButton(
-                onPressed: () async {
-                  await context.read<PostsCubit>().updatePost(widget.post);
-                  //await context.read<PostsCubit>().fetchtPosts();
-                  
-                  context.push(AppRouter.kFetchView);
-                },
-                icon: const Icon(Icons.update, color: Colors.red),
-              ),
-            );
-          
-        },
-    
+    return BlocConsumer<PostsCubit, PostsState>(
+      listener: (context, state) {
+        if (state is UpdatePostSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Post updated successfully')),
+          );
+        }
+      },
+      builder: (context, state) {
+        return ListTile(
+          title: TextFormField(
+            controller: titleController,
+            style: const TextStyle(color: Colors.red),
+            onChanged: (value) {
+              widget.post.title = value;
+            },
+          ),
+          subtitle: TextFormField(
+            controller: bodyController,
+            onChanged: (value) {
+              widget.post.body = value;
+            },
+          ),
+          trailing: IconButton(
+            onPressed: () async {
+              final updatedPost = PostEntity(
+                id: widget.post.id,
+                title: titleController.text,
+                body: bodyController.text,
+              );
+              await context.read<PostsCubit>().updatePost(updatedPost);
+              context.pop();
+            },
+            icon: const Icon(Icons.update, color: Colors.red),
+          ),
+        );
+      },
     );
   }
 }

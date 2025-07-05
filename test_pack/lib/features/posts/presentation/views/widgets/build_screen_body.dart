@@ -31,10 +31,11 @@ class BuildPostsScreenBody extends StatelessWidget {
           posts.addAll(state.posts);
         }
 
-        if (state is UpdatePostSuccess) {
-          await context.read<PostsCubit>().fetchtPosts();
-        }
         if (state is UpdatePostFailure) {}
+        if (state is UpdatePostSuccess) {
+          posts.clear();
+          posts.addAll(state.posts);
+        }
       },
       builder: (context, state) {
         if (state is FeaturedPostsSuccess) {
@@ -43,10 +44,14 @@ class BuildPostsScreenBody extends StatelessWidget {
           return BuildFetchSuccess(posts: state.posts);
         } else if (state is DeletePostSuccess) {
           return BuildFetchSuccess(posts: state.posts);
-        } else if (state is FeaturedPostsFailure) {
-          return Text(state.errMessage);
         } else if (state is UpdatePostSuccess) {
-          return BuildFetchSuccess(posts: posts);
+          return BuildFetchSuccess(posts: state.posts);
+        } else if (state is UpdatePostFailure) {
+          return Center(child: Text(state.message));
+        } else if (state is AddPostFailure) {
+          return Center(child: Text(state.message));
+        } else if (state is DeletePostFailure) {
+          return Center(child: Text(state.message));
         } else {
           return const CircularProgressIndicator();
         }

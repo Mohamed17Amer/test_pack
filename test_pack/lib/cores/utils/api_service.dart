@@ -37,14 +37,12 @@ class ApiService {
     return dataList;
   }
 
-  
   Future<void> addPost(PostEntity post) async {
     final response = await _dio.post("$baseUrl/posts", data: post);
     log("on addition ${response.data}");
   }
-  
 
-  void deletePosst(int id) async {
+  Future<void> deletePosst(int id) async {
     final response = await _dio.delete(
       '$baseUrl/posts/$id',
       options: Options(headers: {"Content-Type": "application/json"}),
@@ -54,11 +52,20 @@ class ApiService {
     // return response.data;
   }
 
-  Future<PostEntity> updatePost(PostEntity post) async {
-    final response = await _dio.patch("$baseUrl/posts/${post.id}", data: post);
-
+  Future<void> updatePost(PostEntity post) async {
+    final response = await _dio.patch(
+      "$baseUrl/posts/${post.id}",
+      data: post,
+      //  options: Options(headers: {"Content-Type": "application/json"}),
+      options: Options(
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          'Accept':
+              'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
+      ),
+    );
     log("on update  ${response.data} ");
-    return PostModel.fromJson(response.data);
   }
-
 }
