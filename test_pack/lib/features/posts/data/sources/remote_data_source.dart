@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:test_pack/cores/utils/api_service.dart';
-import 'package:test_pack/cores/utils/constants.dart';
-import 'package:test_pack/cores/utils/hive_services.dart';
+import 'package:test_pack/cores/utils/hive_services_for_posts.dart';
 import 'package:test_pack/features/posts/domain/entities/post_entity.dart';
 
 abstract class RemoteDataSource {
@@ -20,7 +19,7 @@ abstract class RemoteDataSource {
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   final ApiService apiService;
-  final HiveServices hiveServices;
+  final HiveServicesForPosts hiveServices;
   RemoteDataSourceImpl(this.apiService, this.hiveServices);
 
   @override

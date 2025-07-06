@@ -1,7 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:test_pack/features/auth_firebase/presentation/views/pages/auth_methods.dart';
-import 'package:test_pack/features/auth_firebase/presentation/views/pages/phone_auth.dart';
+import 'package:test_pack/features/auth_firebase/presentation/views/pages/phone_auth_screen.dart';
 import 'package:test_pack/features/posts/domain/entities/post_entity.dart';
 import 'package:test_pack/features/posts/presentation/views/screens/add_posts_screen.dart';
 import 'package:test_pack/features/posts/presentation/views/screens/fetch_posts_screen.dart';
@@ -51,7 +50,7 @@ abstract class AppRouter {
 
       GoRoute(
         path: kFirebasePhoneAuthView,
-        builder: (context, state) =>  PhoneAuth(),
+        builder: (context, state) =>  PhoneAuthScreen(),
       ),
     ],
   );

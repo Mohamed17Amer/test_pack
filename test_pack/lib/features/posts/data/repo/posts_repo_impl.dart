@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:test_pack/cores/errors/failure.dart';
+import 'package:test_pack/cores/errors/server_errors.dart';
 import 'package:test_pack/cores/utils/constants.dart';
-import 'package:test_pack/cores/utils/hive_services.dart';
+import 'package:test_pack/cores/utils/hive_services_for_posts.dart';
 import 'package:test_pack/features/posts/data/sources/local_data_source.dart';
 import 'package:test_pack/features/posts/data/sources/remote_data_source.dart';
 
@@ -12,7 +13,7 @@ import 'package:test_pack/features/posts/domain/repo/post_repo.dart';
 class PostsRepoImpl implements PostRepository {
   final LocalDataSource localDataSource;
   final RemoteDataSource remoteDataSource;
-  final HiveServices hiveServices;
+  final HiveServicesForPosts hiveServices;
 
   PostsRepoImpl({
     required this.localDataSource,

@@ -6,7 +6,7 @@ class SignInWithPhoneUseCase {
   final AuthWithPhoneRepository repository;
   SignInWithPhoneUseCase(this.repository);
 
-  Future<Either<Failure, Unit>> call(String phoneNumber, String smsCode) async {
-    return await repository.signInWithPhone(phoneNumber, smsCode);
+  Future<Either<Failure, Unit>> call(String smsCode) async {
+    return await repository.signInWithPhone(smsCode);
   }
 }
