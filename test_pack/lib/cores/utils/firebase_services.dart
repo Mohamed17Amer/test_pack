@@ -8,65 +8,75 @@ class FirebaseServices {
   TextEditingController phoneController = TextEditingController();
   TextEditingController codeController = TextEditingController();
 
- static String? verificationId; // for verification operation - it is not sms code
+  static String?
+  verificationId; // for verification operation - it is not sms code
 
-  Future<void> verifyPhone({@ required String? phoneNumber}) async {
-    try {
-      // await FirebaseAuth.instance.verifyPhoneNumber()
-      // 6 main common arguments
+  Future<void> verifyPhone({@required String? phoneNumber}) async {
+    // await FirebaseAuth.instance.verifyPhoneNumber()
+    // 6 main common arguments
 
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber:phoneNumber!.trim(),
-        timeout: const Duration(seconds: 60),
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber!.trim(),
+      timeout: const Duration(seconds: 60),
 
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          // Auto-retrieve or instant verification
-          // if automatically detected
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Auto-retrieve or instant verification
+        // if automatically detected
 
-          await signInWithCredential(credential);
-        },
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
 
-        verificationFailed: (FirebaseAuthException e) {
-          // Handle error
-          log("showError  verificationFailed  ${e.message}");
-        },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle error
+        log("showError  verificationFailed  ${e.message}");
+      },
 
-        codeSent: (String verId, int? resendToken) {
-          // Save verification ID
-          verificationId = verId;
-        
-        },
+      codeSent: (String verId, int? resendToken) {
+        // Save verification ID
+        verificationId = verId;
+        log("showError  codeSent  $verId");
+      },
 
-        codeAutoRetrievalTimeout: (String verId) {
-          verificationId = verId;
-        },
+      codeAutoRetrievalTimeout: (String verId) {
+        verificationId = verId;
+        log("showError  codeAutoRetrievalTimeout  $verId");
+      },
+
+
+
+      
+    );
+
+
+  }
+
+  Future<void> signInWithCode({@required String? smsCode}) async {
+    if (verificationId != null) {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId!,
+        smsCode: smsCode!.trim(),
       );
-    } on FirebaseAuthException catch (e) {
-      log("showError verifyPhoneNumber ${e.message}");
+      await signInWithCredential(credential);
     }
   }
 
   Future<void> signInWithCredential(PhoneAuthCredential credential) async {
-    try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      // Success
-      log('Successfully signed in!   signInWithCredential  ');
-    } on FirebaseAuthException catch (e) {
-      log("showError   signInWithCredential   ${e.message}");
-    }
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    // Success
+    log('Successfully signed in!   signInWithCredential  ');
   }
 
-  Future<void> signInWithCode({@ required String? smsCode}) async {
-    if (verificationId != null && smsCode!.isNotEmpty) {
-      try {
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId!,
-          smsCode: smsCode.trim(),
-        );
-        await signInWithCredential(credential);
-      } catch (e) {
-        log("showError signInWithCode ${e.toString()}");
-      }
-    }
-  }
+
+
+  Future<User?> signInWithSmsCode(String verificationId, String smsCode) async {
+  // Create a PhoneAuthCredential with the verification ID and the SMS code
+  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    verificationId: verificationId,
+    smsCode: smsCode,
+  );
+
+  // Sign in with the credential
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+  return userCredential.user;
+}
 }

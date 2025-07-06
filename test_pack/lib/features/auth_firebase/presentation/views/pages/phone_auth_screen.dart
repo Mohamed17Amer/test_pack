@@ -24,13 +24,9 @@ class PhoneAuthScreen extends StatelessWidget {
             return Center(child: Text(state.message));
           } else if (state is FirebasePhoneAuthSignInFailureState) {
             return Center(child: Text(state.message));
-          }
-
-          if (state is FirebasePhoneAuthSignUpSuccessState) {
+          } else if (state is FirebasePhoneAuthSignUpSuccessState) {
             buildErrorWidget('code sent to your phone number');
-          }
-
-          if (state is FirebasePhoneAuthSignInSuccessState) {
+          } else if (state is FirebasePhoneAuthSignInSuccessState) {
             buildErrorWidget('signed in successfully');
           }
 
@@ -60,9 +56,7 @@ class PhoneAuthScreen extends StatelessWidget {
                             onPressed: () {
                               context
                                   .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber(
-                                    reqisterPhoneNumberController.text,
-                                  );
+                                  .signUpWithPhoneNumber("+201011221445647");
                             },
                             child: const Text('Send Code  - verify '),
                           ),
@@ -76,9 +70,7 @@ class PhoneAuthScreen extends StatelessWidget {
                             onPressed: () {
                               context
                                   .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber(
-                                    verificationCodeController.text,
-                                  );
+                                  .signInWithPhoneNumber("123456");
                             },
                             child: const Text('Verify sms Code - login'),
                           ),

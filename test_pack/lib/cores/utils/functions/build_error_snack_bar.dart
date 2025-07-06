@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-SnackBar buildErrorWidget(String errMessage) {
-  return SnackBar(
+ buildErrorWidget(String errMessage) {
+   SnackBar(
     content: Text(
       errMessage,
       style: const TextStyle(),

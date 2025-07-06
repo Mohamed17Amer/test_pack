@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:test_pack/cores/utils/firebase_services.dart';
 
 abstract class AuthWithPhoneRemoteDataSource {
-  Future<void> signUpWithPhone(String phoneNumber);
-  Future<void> signInWithPhone(String smsCode);
+  Future<Unit> signUpWithPhone(String phoneNumber);
+  Future<Unit> signInWithPhone(String smsCode);
 }
 
 class AuthWithPhoneRemoteDataSourceImpl
@@ -18,7 +18,8 @@ class AuthWithPhoneRemoteDataSourceImpl
   }
 
   @override
-  Future<void> signInWithPhone( String smsCode) async {
+
+  Future<Unit> signInWithPhone( String smsCode) async {
       await firebaseServices.signInWithCode(smsCode: smsCode);
       return Future.value(unit);
 
