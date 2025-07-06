@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_pack/cores/utils/functions/build_error_snack_bar.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_cubit.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_state.dart';
 
@@ -19,30 +20,95 @@ class PhoneAuthScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is FirebasePhoneAuthLoadingState) {
             return const Center(child: CircularProgressIndicator());
-          }
-          if (state is FirebasePhoneAuthFailureState) {
+          } else if (state is FirebasePhoneAuthSignUpFailureState) {
+            return Center(child: Text(state.message));
+          } else if (state is FirebasePhoneAuthSignInFailureState) {
             return Center(child: Text(state.message));
           }
-          if (state is FirebasePhoneAuthSuccessState) {
-            return Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(flex: 1, child: buildSignUp(context)),
-                  const VerticalDivider(
-                    color: Colors.white,
-                    thickness: 2,
-                    endIndent: 20.00,
-                    indent: 20.00,
-                  ),
 
-                  Expanded(flex: 1, child: buildSignIn()),
-                ],
-              ),
-            );
+          if (state is FirebasePhoneAuthSignUpSuccessState) {
+            buildErrorWidget('code sent to your phone number');
           }
-          return const Center(child: Text('Initial State'));
+
+          if (state is FirebasePhoneAuthSignInSuccessState) {
+            buildErrorWidget('signed in successfully');
+          }
+
+          return Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child:
+                      //sign up
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text('Sign Up'),
+                          TextFormField(
+                            controller: reqisterPhoneNumberController,
+                            decoration: const InputDecoration(
+                              hintText: '+201011245647',
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<FirebaseAuthCubit>()
+                                  .signUpWithPhoneNumber(
+                                    reqisterPhoneNumberController.text,
+                                  );
+                            },
+                            child: const Text('Send Code  - verify '),
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: verificationCodeController,
+                            decoration: const InputDecoration(hintText: 'code'),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<FirebaseAuthCubit>()
+                                  .signUpWithPhoneNumber(
+                                    verificationCodeController.text,
+                                  );
+                            },
+                            child: const Text('Verify sms Code - login'),
+                          ),
+                        ],
+                      ),
+                ),
+                const VerticalDivider(
+                  color: Colors.white,
+                  thickness: 2,
+                  endIndent: 20.00,
+                  indent: 20.00,
+                ),
+
+                const Expanded(
+                  flex: 1,
+                  child: //sign in
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Sign In'),
+                      TextField(
+                        decoration: InputDecoration(hintText: 'Phone Number'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

@@ -28,7 +28,7 @@ class FirebaseServices {
 
         verificationFailed: (FirebaseAuthException e) {
           // Handle error
-          log("showError ${e.message}");
+          log("showError  verificationFailed  ${e.message}");
         },
 
         codeSent: (String verId, int? resendToken) {
@@ -42,7 +42,7 @@ class FirebaseServices {
         },
       );
     } on FirebaseAuthException catch (e) {
-      log("showError ${e.message}");
+      log("showError verifyPhoneNumber ${e.message}");
     }
   }
 
@@ -50,9 +50,9 @@ class FirebaseServices {
     try {
       await FirebaseAuth.instance.signInWithCredential(credential);
       // Success
-      log('Successfully signed in!');
+      log('Successfully signed in!   signInWithCredential  ');
     } on FirebaseAuthException catch (e) {
-      log("showError ${e.message}");
+      log("showError   signInWithCredential   ${e.message}");
     }
   }
 
@@ -65,7 +65,7 @@ class FirebaseServices {
         );
         await signInWithCredential(credential);
       } catch (e) {
-        log("showError ${e.toString()}");
+        log("showError signInWithCode ${e.toString()}");
       }
     }
   }

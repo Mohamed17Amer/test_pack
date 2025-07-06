@@ -15,10 +15,10 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthState> {
     var result = await signUpWithPhoneUseCase.call(phoneNumber);
     result.fold(
       (failure) {
-        emit(FirebasePhoneAuthFailureState(failure.message));
+        emit(FirebasePhoneAuthSignUpFailureState(failure.message));
       },
       (success) {
-        emit(FirebasePhoneAuthSuccessState());
+        emit(FirebasePhoneAuthSignUpSuccessState());
       },
     );
   }
@@ -28,10 +28,10 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthState> {
     var result = await signInWithPhoneUseCase.call(smsCode);
     result.fold(
       (failure) {
-        emit(FirebasePhoneAuthFailureState(failure.message));
+        emit(FirebasePhoneAuthSignInFailureState(failure.message));
       },
       (success) {
-        emit(FirebasePhoneAuthSuccessState());
+        emit(FirebasePhoneAuthSignInSuccessState());
       },
     );
   }
