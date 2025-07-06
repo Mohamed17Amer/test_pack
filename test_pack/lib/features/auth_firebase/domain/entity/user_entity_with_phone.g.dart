@@ -1,38 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_entity.dart';
+part of 'user_entity_with_phone.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PostEntityAdapter extends TypeAdapter<PostEntity> {
+class UserEntityWithPhoneAdapter extends TypeAdapter<UserEntityWithPhone> {
   @override
   final int typeId = 0;
 
   @override
-  PostEntity read(BinaryReader reader) {
+  UserEntityWithPhone read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PostEntity(
-      id: fields[0] as int?,
-      title: fields[1] as String?,
-      body: fields[2] as String?,
-    );
+    return UserEntityWithPhone()
+      ..phone = fields[0] as String?
+      ..uid = fields[1] as String?;
   }
 
   @override
-  void write(BinaryWriter writer, PostEntity obj) {
+  void write(BinaryWriter writer, UserEntityWithPhone obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.body);
+      ..writeByte(0)
+      ..write(obj.phone)
+      ..writeByte(1)
+      ..write(obj.uid);
   }
 
   @override
@@ -41,7 +37,7 @@ class PostEntityAdapter extends TypeAdapter<PostEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PostEntityAdapter &&
+      other is UserEntityWithPhoneAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PhoneAuth extends StatelessWidget {
-  const PhoneAuth({super.key});
+  PhoneAuth({super.key});
+
+  TextEditingController loginPhoneNumberController = TextEditingController();
+  TextEditingController reqisterPhoneNumberController = TextEditingController();
+  TextEditingController verificationCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,25 @@ class PhoneAuth extends StatelessWidget {
   buildSignUp() {
     return
     //sign up
-    const Column(
+    Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('Sign Up'),
-        TextField(decoration: InputDecoration(hintText: 'Phone Number')),
+        const Text('Sign Up'),
+        TextFormField(
+          controller: reqisterPhoneNumberController,
+          decoration: const InputDecoration(hintText: '+201011245647'),
+        ),
+
+        const SizedBox(height: 10),
+        ElevatedButton(onPressed: () {}, child: const Text('Send Code')),
+        const SizedBox(height: 10),
+        TextFormField(
+          controller: verificationCodeController,
+          decoration: const InputDecoration(hintText: 'code'),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(onPressed: () {}, child: const Text('Verify Code')),
       ],
     );
   }

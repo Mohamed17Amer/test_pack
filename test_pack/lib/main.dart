@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +14,7 @@ import 'package:test_pack/features/posts/domain/use_cases/delete_post.dart';
 import 'package:test_pack/features/posts/domain/use_cases/get_all_posts.dart';
 import 'package:test_pack/features/posts/domain/use_cases/update_post.dart';
 import 'package:test_pack/features/posts/presentation/manager/cubit/posts_cubit.dart';
+import 'package:test_pack/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,8 @@ void main() async {
 
   await Hive.openBox<PostEntity>(postsBox);
   Bloc.observer = SimpleBlocObserver();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
