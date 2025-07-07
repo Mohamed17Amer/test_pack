@@ -1,10 +1,7 @@
-import 'dart:async';
 import 'dart:developer';
 
-import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_pack/cores/errors/firebase_errors.dart';
 
 class FirebaseServices {
   TextEditingController loginPhoneNumberController = TextEditingController();
@@ -14,35 +11,43 @@ class FirebaseServices {
   static String?
   verificationId; // for verification operation - it is not sms code
 
-  Future<void> verifyPhone({
-    required String phoneNumber,
-    Function(FirebaseFailure)? onVerificationFailed,
-  }) async {
-    try {
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
+  Future<void> verifyPhone({@required String? phoneNumber}) async {
+    // await FirebaseAuth.instance.verifyPhoneNumber()
+    // 6 main common arguments
 
-        verificationFailed: (FirebaseAuthException e) {
-          log("showError verificationFailed: ${e.message}");
-          onVerificationFailed?.call(
-            FirebaseFailure(e.message ?? "Phone verification failed"),
-          );
-        },
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await signInWithCredential(credential);
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          verificationId = verificationId;
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          verificationId = verificationId;
-        },
-        // Other callbacks...
-      );
-    } catch (e) {
-      // Additional error handling if needed
-      onVerificationFailed?.call(FirebaseFailure(e.toString()));
-    }
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber!.trim(),
+      timeout: const Duration(seconds: 60),
+
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Auto-retrieve or instant verification
+        // if automatically detected
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
+
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle error
+        log("showError  verificationFailed  ${e.message}");
+      },
+
+      codeSent: (String verId, int? resendToken) {
+        // Save verification ID
+        verificationId = verId;
+        log("showError  codeSent  $verId");
+      },
+
+      codeAutoRetrievalTimeout: (String verId) {
+        verificationId = verId;
+        log("showError  codeAutoRetrievalTimeout  $verId");
+      },
+
+
+
+      
+    );
+
+
   }
 
   Future<void> signInWithCode({@required String? smsCode}) async {
@@ -61,16 +66,17 @@ class FirebaseServices {
     log('Successfully signed in!   signInWithCredential  ');
   }
 
-  Future<User?> signInWithSmsCode(String verificationId, String smsCode) async {
-    // Create a PhoneAuthCredential with the verification ID and the SMS code
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
 
-    // Sign in with the credential
-    UserCredential userCredential = await FirebaseAuth.instance
-        .signInWithCredential(credential);
-    return userCredential.user;
-  }
+
+  Future<User?> signInWithSmsCode(String verificationId, String smsCode) async {
+  // Create a PhoneAuthCredential with the verification ID and the SMS code
+  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    verificationId: verificationId,
+    smsCode: smsCode,
+  );
+
+  // Sign in with the credential
+  UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+  return userCredential.user;
+}
 }
