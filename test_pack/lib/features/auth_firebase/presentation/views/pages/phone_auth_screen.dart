@@ -18,18 +18,7 @@ class PhoneAuthScreen extends StatelessWidget {
       body: BlocConsumer<FirebaseAuthCubit, FirebaseAuthState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is FirebasePhoneAuthLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is FirebasePhoneAuthSignUpFailureState) {
-            return Center(child: Text(state.message));
-          } else if (state is FirebasePhoneAuthSignInFailureState) {
-            return Center(child: Text(state.message));
-          } else if (state is FirebasePhoneAuthSignUpSuccessState) {
-            buildErrorWidget('code sent to your phone number');
-          } else if (state is FirebasePhoneAuthSignInSuccessState) {
-            buildErrorWidget('signed in successfully');
-          }
-
+       
           return Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,7 +36,7 @@ class PhoneAuthScreen extends StatelessWidget {
                           TextFormField(
                             controller: reqisterPhoneNumberController,
                             decoration: const InputDecoration(
-                              hintText: '+201011245647',
+                              hintText: '+201500422619',
                             ),
                           ),
 
@@ -56,7 +45,7 @@ class PhoneAuthScreen extends StatelessWidget {
                             onPressed: () {
                               context
                                   .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber("+201011221445647");
+                                  .signUpWithPhoneNumber("+201011245647");
                             },
                             child: const Text('Send Code  - verify '),
                           ),

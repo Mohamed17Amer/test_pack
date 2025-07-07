@@ -12,13 +12,13 @@ class AuthWithPhoneRepositoryImpl implements AuthWithPhoneRepository {
   AuthWithPhoneRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, Unit>> signUpWithPhone(String phoneNumber) async {
-    try {
-      await remoteDataSource.signUpWithPhone(phoneNumber);
-      return right(unit);
-    } catch (e) {
-      return left(FirebaseFailure(e.toString()));
-    }
+  Future<Either<Failure, String>> signUpWithPhone(String phoneNumber) async {
+   try {
+    final verificationId = await remoteDataSource.signUpWithPhone(phoneNumber);
+    return Right(verificationId);
+  } catch (e) {
+    return Left(FirebaseFailure(e.toString()));
+  }
   }
 
   @override
