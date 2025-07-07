@@ -53,10 +53,10 @@ class PhoneAuthScreen extends StatelessWidget {
 
                           const SizedBox(height: 10),
                           ElevatedButton(
-                            onPressed: () {
-                              context
+                            onPressed: () async{
+                            await  context
                                   .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber("+201011221445647");
+                                  .signUpWithPhoneNumber("+201011gggg245647");
                             },
                             child: const Text('Send Code  - verify '),
                           ),
