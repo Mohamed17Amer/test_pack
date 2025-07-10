@@ -9,7 +9,7 @@ import 'package:test_pack/cores/utils/firebase_services.dart';
 import 'package:test_pack/cores/utils/functions/setup_service_locator.dart';
 import 'package:test_pack/cores/utils/simple_bloc_observer.dart';
 import 'package:test_pack/features/auth_firebase/data/repo/auth_with_phone_repo_impl.dart';
-import 'package:test_pack/features/auth_firebase/data/sources/remote_data_source/remote_data_source.dart';
+import 'package:test_pack/features/auth_firebase/data/sources/remote_data_source/remote_data_source_with_phone.dart';
 import 'package:test_pack/features/auth_firebase/domain/use_case/sign_in_with_phone_use_case.dart';
 import 'package:test_pack/features/auth_firebase/domain/use_case/sign_up_with_phone_use_case.dart';
 import 'package:test_pack/features/posts/data/repo/posts_repo_impl.dart';
