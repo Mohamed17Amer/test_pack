@@ -4,11 +4,18 @@ import 'package:test_pack/cores/utils/functions/build_error_snack_bar.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_cubit.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_state.dart';
 
-class PhoneAuthScreen extends StatelessWidget {
+class PhoneAuthScreen extends StatefulWidget {
   PhoneAuthScreen({super.key});
 
+  @override
+  State<PhoneAuthScreen> createState() => _PhoneAuthScreenState();
+}
+
+class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   TextEditingController loginPhoneNumberController = TextEditingController();
+
   TextEditingController reqisterPhoneNumberController = TextEditingController();
+
   TextEditingController verificationCodeController = TextEditingController();
 
   @override
@@ -18,7 +25,6 @@ class PhoneAuthScreen extends StatelessWidget {
       body: BlocConsumer<FirebaseAuthCubit, FirebaseAuthState>(
         listener: (context, state) {},
         builder: (context, state) {
-       
           return Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,10 +48,17 @@ class PhoneAuthScreen extends StatelessWidget {
 
                           const SizedBox(height: 10),
                           ElevatedButton(
-                            onPressed: () {
-                              context
+                            onPressed: () async {
+                             if (reqisterPhoneNumberController.text.isEmpty) {
+                               BuildErrorWidget( errMessage:  'Phone Number is Empty');
+                              }
+                             else if  (reqisterPhoneNumberController.text.isNotEmpty) {
+                              await context
                                   .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber("+201011245647");
+                                  .signUpWithPhoneNumber(
+                                    reqisterPhoneNumberController.text,
+                                  );
+                              }
                             },
                             child: const Text('Send Code  - verify '),
                           ),
@@ -56,10 +69,17 @@ class PhoneAuthScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           ElevatedButton(
-                            onPressed: () {
-                              context
+                            onPressed: () async {
+                               if (verificationCodeController.text.isEmpty) {
+                              const BuildErrorWidget( errMessage:  'code is Empty');
+                              }
+                             else if  (verificationCodeController.text.isNotEmpty) {
+                              await context
                                   .read<FirebaseAuthCubit>()
-                                  .signInWithPhoneNumber("123456");
+                                  .signInWithPhoneNumber(
+                                    verificationCodeController.text,
+                                  );
+                              }
                             },
                             child: const Text('Verify sms Code - login'),
                           ),

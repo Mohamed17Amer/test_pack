@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_pack/cores/errors/failure.dart';
 import 'package:test_pack/cores/errors/firebase_errors.dart';
 import 'package:test_pack/cores/errors/server_errors.dart';
@@ -22,13 +23,13 @@ class AuthWithPhoneRepositoryImpl implements AuthWithPhoneRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> signInWithPhone(String smsCode) async {
+  Future<Either<Failure, String>> signInWithPhone(String smsCode) async {
     try {
-      await remoteDataSource.signInWithPhone(smsCode);
-      return right(unit);
+      final result = await remoteDataSource.signInWithPhone(smsCode);
+      return Right(result);
     } catch (e) {
-       log('error in sign in with phone');
-      return left(FirebaseFailure(e.toString()));
+      log('error in sign in with phone');
+      return Left(FirebaseFailure(e.toString()));
     }
   }
 }

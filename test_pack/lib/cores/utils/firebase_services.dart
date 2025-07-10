@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +47,8 @@ class FirebaseServices {
           }
         },
 
-        codeSent: (String verificationId, int? resendToken) {
+        codeSent: (String verification, int? resendToken) {
+          verificationId = verification;
           log('code sent');
           if (!completer.isCompleted) {
             completer.complete(verificationId);
@@ -68,20 +68,12 @@ class FirebaseServices {
         },
       );
     } catch (e) {
-      log("catch " + e.toString());
+      log("catch $e");
       throw FirebaseFailure(e.toString());
     }
   }
 
-  Future<void> signInWithCode({@required String? smsCode}) async {
-    if (verificationId != null) {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId!,
-        smsCode: smsCode!.trim(),
-      );
-      await signInWithCredential(credential);
-    }
-  }
+
 
   Future<void> signInWithCredential(PhoneAuthCredential credential) async {
     await FirebaseAuth.instance.signInWithCredential(credential);
@@ -89,16 +81,52 @@ class FirebaseServices {
     log('Successfully signed in!   signInWithCredential  ');
   }
 
-  Future<User?> signInWithSmsCode(String verificationId, String smsCode) async {
-    // Create a PhoneAuthCredential with the verification ID and the SMS code
+// In your Firebase service, add detailed logging:
+Future<String> verifyOtpCode({
+  required String smsCode
+}) async {
+  try {
+    log("🔍 Verifying OTP:");
+    log("📱 Verification ID: $verificationId");
+    log("🔢 SMS Code: $smsCode");
+    
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
+      verificationId: verificationId!,
+      smsCode: smsCode.trim(), // Remove whitespace
     );
+    log("v1 : ${credential.verificationId}  ");
+    log("v2 : ${verificationId}  ");
 
-    // Sign in with the credential
-    UserCredential userCredential = await FirebaseAuth.instance
-        .signInWithCredential(credential);
-    return userCredential.user;
+    log("✅ Credential created successfully");
+    
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    
+    log("✅ Sign in successful");
+    
+    if (userCredential.user != null) {
+      return "success";
+    } else {
+      return "User is null after sign in";
+    }
+  } catch (e) {
+    log("❌ OTP Verification failed: ${e.toString()}");
+    
+    if (e is FirebaseAuthException) {
+      log("❌ Error code: ${e.code}");
+      log("❌ Error message: ${e.message}");
+      
+      switch (e.code) {
+        case 'invalid-verification-code':
+          return "Invalid verification code. Please try again.";
+        case 'user-disabled':
+          return "This user account has been disabled.";
+        default:
+          return e.message ?? "OTP verification failed";
+      }
+    }
+    
+    // Handle other types of exceptions
+    return "Unexpected error during OTP verification";
   }
+}
 }

@@ -20,7 +20,9 @@ class FirebasePhoneAuthSignUpFailureState extends FirebaseAuthState {
   FirebasePhoneAuthSignUpFailureState(this.message);
 }
 
- class FirebasePhoneAuthSignInSuccessState extends FirebaseAuthState {}
+ class FirebasePhoneAuthSignInSuccessState extends FirebaseAuthState {
+   
+ }
 
 class FirebasePhoneAuthSignInFailureState extends FirebaseAuthState {
   String message;
