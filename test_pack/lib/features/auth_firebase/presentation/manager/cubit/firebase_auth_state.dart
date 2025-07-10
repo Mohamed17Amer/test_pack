@@ -60,3 +60,45 @@ class FirebaseFailureFailureState extends FirebaseAuthState {
   String message;
   FirebaseFailureFailureState(this.message);
 }
+
+
+// other services
+
+// logout
+class FirebaseAuthLogoutSuccessState extends FirebaseAuthState {}
+class FirebaseAuthLogoutFailureState extends FirebaseAuthState {
+  String message;
+  FirebaseAuthLogoutFailureState(this.message);
+}
+// delete account
+ class FirebaseAccountDeletedSuccessState extends FirebaseAuthState {}
+ class FirebaseAccountDeletedFailureState extends FirebaseAuthState {
+  String message;
+  FirebaseAccountDeletedFailureState(this.message);
+}
+
+// reauth
+ class FirebaseAuthReauthSuccessState extends FirebaseAuthState {}
+  class FirebaseAuthReauthFailureState extends FirebaseAuthState {
+  String message;
+  FirebaseAuthReauthFailureState(this.message);
+}
+
+// change password
+
+ class FirebaseChangePasswordSuccessState extends FirebaseAuthState {}
+  class FirebaseChangePasswordFailureState extends FirebaseAuthState {
+  String message;
+  FirebaseChangePasswordFailureState(this.message);
+}
+
+// verify email
+class FirebaseVerifyEmailSuccessState extends FirebaseAuthState {}
+class FirebaseVerifyEmailFailureState extends FirebaseAuthState {
+  String message;
+  FirebaseVerifyEmailFailureState(this.message);
+}
+
+
+
+

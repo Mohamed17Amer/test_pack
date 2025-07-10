@@ -111,8 +111,10 @@ class FirebaseServices {
     final completer = Completer<String>();
 
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (!completer.isCompleted) {
         completer.complete("success");
@@ -127,6 +129,8 @@ class FirebaseServices {
       }
     }
 
+    await verfyEmail();
+
     return await completer.future.timeout(
       const Duration(seconds: 65),
       onTimeout: () {
@@ -135,36 +139,48 @@ class FirebaseServices {
     );
   }
 
-  Future<String> signInWithEmail({
-    required String email,
-    required String password,
-  }) async {
-    final completer = Completer<String>();
+ Future signInWithEmail({
+  required String email,
+  required String password,
+}) async {
+  final completer = Completer();
 
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+  try {
+    final userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
 
+    final user = userCredential.user;
+
+    if (user != null && user.emailVerified) {
       if (!completer.isCompleted) {
         completer.complete("success");
       }
-    } on FirebaseAuthException catch (e) {
+    } else {
+      // Email not verified
+      
+      await FirebaseAuth.instance.signOut();
       if (!completer.isCompleted) {
-        completer.completeError(FirebaseFailure(e.code.toString()));
-      }
-    } catch (e) {
-      if (!completer.isCompleted) {
-        completer.completeError(FirebaseFailure(e.toString()));
+        completer.completeError(FirebaseFailure("Email not verified. Please check your inbox."));
       }
     }
-
-    return await completer.future.timeout(
-      const Duration(seconds: 65),
-      onTimeout: () {
-        throw FirebaseFailure("Request timed out");
-      },
-    );
+  } on FirebaseAuthException catch (e) {
+    if (!completer.isCompleted) {
+      completer.completeError(FirebaseFailure(e.code.toString()));
+    }
+  } catch (e) {
+    if (!completer.isCompleted) {
+      completer.completeError(FirebaseFailure(e.toString()));
+    }
   }
+
+  return await completer.future.timeout(
+    const Duration(seconds: 65),
+    onTimeout: () {
+      throw FirebaseFailure("Request timed out");
+    },
+  );
+}
+
 
   Future<String> resetPassword({required String email}) async {
     try {
@@ -193,28 +209,42 @@ class FirebaseServices {
     await user?.updatePassword('newPassword');
   }
 
-Future<void> reauth()async{
-  User? user = FirebaseAuth.instance.currentUser;
+  Future<void> reauth() async {
+    User? user = FirebaseAuth.instance.currentUser;
 
-if (user != null) {
-  try {
-    // Re-authenticate (for example, using email and password)
-    AuthCredential credential = EmailAuthProvider.credential(
-      email: user.email!,
-      password: 'userCurrentPassword', // Must be entered by user
-    );
+    if (user != null) {
+      try {
+        // Re-authenticate (for example, using email and password)
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: 'userCurrentPassword', // Must be entered by user
+        );
 
-    await user.reauthenticateWithCredential(credential);
+        await user.reauthenticateWithCredential(credential);
 
-    // Now delete
-    await user.delete();
+        // Now delete
+        await user.delete();
 
-    log('User deleted');
-  } catch (e) {
-    log('Failed to delete user: $e');
+        log('User deleted');
+      } catch (e) {
+        log('Failed to delete user: $e');
+      }
+    }
   }
-}
 
-}
-
+  Future<String> verfyEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        // Send verification email
+        await user.sendEmailVerification();
+        log('Verification email sent');
+        return " sent email verification success";
+      } catch (e) {
+        log('Failed to send verification email: $e');
+        return "Failed to send verification email: $e";
+      }
+    }
+    return "No user found";
+  }
 }
