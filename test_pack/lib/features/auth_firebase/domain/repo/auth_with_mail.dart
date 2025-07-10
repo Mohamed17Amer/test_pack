@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:test_pack/cores/errors/failure.dart';
 
-abstract class AuthWithPhoneRepository {
-  Future<Either<Failure, String>> signUpWithPhone(String phoneNumber);
-  Future<Either<Failure, String>> signInWithPhone(String smsCode);
+abstract class AuthWithEmailRepository {
+  Future<Either<Failure, String>> signUpWithEmail(String email, String password);
+  Future<Either<Failure, String>> signInWithEmail(String email, String password);
 }

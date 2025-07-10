@@ -1,33 +1,33 @@
-import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:test_pack/cores/errors/failure.dart';
 import 'package:test_pack/cores/errors/firebase_errors.dart';
-import 'package:test_pack/features/auth_firebase/data/sources/remote_data_source/remote_data_source_with_phone.dart';
-import 'package:test_pack/features/auth_firebase/domain/repo/auth_with_phone.dart';
+import 'package:test_pack/features/auth_firebase/data/sources/remote_data_source/remote_data_source_with_mail.dart';
+import 'package:test_pack/features/auth_firebase/domain/repo/auth_with_mail.dart';
 
-class AuthWithPhoneRepositoryImpl implements AuthWithPhoneRepository {
-  final AuthWithPhoneRemoteDataSource remoteDataSource;
-  AuthWithPhoneRepositoryImpl(this.remoteDataSource);
+
+class AuthWithEmailRepositoryImpl implements AuthWithEmailRepository {
+  final AuthWithEmailRemoteDataSourceImpl remoteDataSource;
+  AuthWithEmailRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, String>> signUpWithPhone(String phoneNumber) async {
+  Future<Either<Failure, String>> signUpWithEmail(String email, String password) async {
     try {
-      final verificationId = await remoteDataSource.signUpWithPhone(
-        phoneNumber,
+      final result = await remoteDataSource.signUpWithEmail(
+        email,password
       );
-      return Right(verificationId);
+      return Right(result);
     } catch (e) {
       return Left(FirebaseFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, String>> signInWithPhone(String smsCode) async {
+  Future<Either<Failure, String>> signInWithEmail(String email, String password) async {
     try {
-      final result = await remoteDataSource.signInWithPhone(smsCode);
+      final result = await remoteDataSource.signInWithEmail(email, password);
       return Right(result);
     } catch (e) {
-      log('error in sign in with phone');
       return Left(FirebaseFailure(e.toString()));
     }
   }

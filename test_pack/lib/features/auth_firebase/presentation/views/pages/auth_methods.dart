@@ -29,6 +29,17 @@ class FirebaseAuthMethodState extends State<FirebaseAuthMethod> {
               },
               child: const Text('Email Auth'),
             ),
+             ElevatedButton(
+              onPressed: () {
+                context.push(AppRouter.kFirebaseFacebookAuthView);
+              },
+              child: const Text('Facebook Auth'),
+            ), ElevatedButton(
+              onPressed: () {
+                context.push(AppRouter.kFirebaseResetPasswordView);
+              },
+              child: const Text('Reset Password'),
+            ),
           ],
         ),
       ),

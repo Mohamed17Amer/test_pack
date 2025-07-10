@@ -1,22 +1,25 @@
 import 'package:test_pack/cores/utils/firebase_services.dart';
 
-abstract class AuthWithPhoneRemoteDataSource {
-  Future<String> signUpWithPhone(String phoneNumber);
-  Future<String> signInWithPhone(String smsCode);
+abstract class AuthWithEmailRemoteDataSource {
+  Future<String> signUpWithEmail(String email, String password);
+  Future<String> signInWithEmail(String email, String password);
 }
 
-class AuthWithPhoneRemoteDataSourceImpl
-    implements AuthWithPhoneRemoteDataSource {
+class AuthWithEmailRemoteDataSourceImpl
+    implements AuthWithEmailRemoteDataSource {
   final FirebaseServices firebaseServices;
-  AuthWithPhoneRemoteDataSourceImpl(this.firebaseServices);
+  AuthWithEmailRemoteDataSourceImpl(this.firebaseServices);
 
-  @override
-  Future<String> signUpWithPhone(String phoneNumber) async {
-    return await firebaseServices.verifyPhone(phoneNumber: phoneNumber);
+ 
+
+    @override
+  Future<String> signUpWithEmail(String email, String password)async {
+    return await firebaseServices.signUpWithEmail(email: email, password: password);
   }
-
+  
   @override
-  Future<String> signInWithPhone(String smsCode) async {
-    return await firebaseServices.verifyOtpCode(smsCode: smsCode);
+  Future<String> signInWithEmail(String email, String password) async {
+      return await firebaseServices.signInWithEmail(email: email, password: password);
+
   }
 }
