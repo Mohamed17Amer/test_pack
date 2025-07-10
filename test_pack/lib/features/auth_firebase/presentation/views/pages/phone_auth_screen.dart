@@ -1,11 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_pack/cores/utils/functions/build_error_snack_bar.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_cubit.dart';
 import 'package:test_pack/features/auth_firebase/presentation/manager/cubit/firebase_auth_state.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
-  PhoneAuthScreen({super.key});
+  const PhoneAuthScreen({super.key});
 
   @override
   State<PhoneAuthScreen> createState() => _PhoneAuthScreenState();
@@ -49,15 +50,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () async {
-                             if (reqisterPhoneNumberController.text.isEmpty) {
-                               BuildErrorWidget( errMessage:  'Phone Number is Empty');
-                              }
-                             else if  (reqisterPhoneNumberController.text.isNotEmpty) {
-                              await context
-                                  .read<FirebaseAuthCubit>()
-                                  .signUpWithPhoneNumber(
-                                    reqisterPhoneNumberController.text,
-                                  );
+                              if (reqisterPhoneNumberController.text.isEmpty) {
+                                log('Phone Number is Empty');
+                              } else if (reqisterPhoneNumberController
+                                  .text
+                                  .isNotEmpty) {
+                                await context
+                                    .read<FirebaseAuthCubit>()
+                                    .signUpWithPhoneNumber(
+                                      reqisterPhoneNumberController.text,
+                                    );
                               }
                             },
                             child: const Text('Send Code  - verify '),
@@ -70,15 +72,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () async {
-                               if (verificationCodeController.text.isEmpty) {
-                              const BuildErrorWidget( errMessage:  'code is Empty');
-                              }
-                             else if  (verificationCodeController.text.isNotEmpty) {
-                              await context
-                                  .read<FirebaseAuthCubit>()
-                                  .signInWithPhoneNumber(
-                                    verificationCodeController.text,
-                                  );
+                              if (verificationCodeController.text.isEmpty) {
+                                log('code is Empty');
+                              } else if (verificationCodeController
+                                  .text
+                                  .isNotEmpty) {
+                                await context
+                                    .read<FirebaseAuthCubit>()
+                                    .signInWithPhoneNumber(
+                                      verificationCodeController.text,
+                                    );
                               }
                             },
                             child: const Text('Verify sms Code - login'),
@@ -95,7 +98,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
 
                 const Expanded(
                   flex: 1,
-                  child: //sign in
+                  child: //sign in - not used
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_pack/cores/errors/failure.dart';
 
 abstract class AuthWithPhoneRepository {

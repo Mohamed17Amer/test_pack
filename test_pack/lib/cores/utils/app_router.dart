@@ -50,7 +50,7 @@ abstract class AppRouter {
 
       GoRoute(
         path: kFirebasePhoneAuthView,
-        builder: (context, state) =>  PhoneAuthScreen(),
+        builder: (context, state) => const PhoneAuthScreen(),
       ),
     ],
   );
