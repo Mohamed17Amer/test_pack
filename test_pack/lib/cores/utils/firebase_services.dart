@@ -149,6 +149,7 @@ class FirebaseServices {
     final userCredential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
 
+// to verify the email address
     final user = userCredential.user;
 
     if (user != null && user.emailVerified) {
@@ -157,7 +158,7 @@ class FirebaseServices {
       }
     } else {
       // Email not verified
-      
+
       await FirebaseAuth.instance.signOut();
       if (!completer.isCompleted) {
         completer.completeError(FirebaseFailure("Email not verified. Please check your inbox."));
