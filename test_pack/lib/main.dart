@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // for all posts CRUD operations
         BlocProvider(
           create: (context) => PostsCubit(
             FetchPostsUsecase(getIt.get<PostsRepoImpl>()),
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           )..fetchtPosts(),
         ),
 
+        // for all firebase auth
         BlocProvider(
           create: (context) => FirebaseAuthCubit(
             SignUpWithPhoneUseCase(
