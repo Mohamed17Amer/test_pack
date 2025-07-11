@@ -277,7 +277,7 @@ class FirebaseServices {
     }
   }
 
-  //google sign in done
+  //google sign in  done - resolved
   Future<String> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
