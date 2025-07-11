@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">postsapp</string>
-    <string name="facebook_app_id">1392136968669016</string>
-    <string name="fb_login_protocol_scheme">3042267e6ac125d151d877b16054d8ae</string>
-    <string name="facebook_client_token">4f25e67ef7c89c1f7811f660f5379290</string>
-
-</resources>
