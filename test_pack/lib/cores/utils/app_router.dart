@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:test_pack/features/auth_firebase/presentation/views/pages/auth_methods.dart';
+import 'package:test_pack/features/auth_firebase/presentation/views/pages/facebook_auth_screen.dart';
+import 'package:test_pack/features/auth_firebase/presentation/views/pages/google_auth_screen.dart';
 import 'package:test_pack/features/auth_firebase/presentation/views/pages/mail_auth_screen.dart';
 import 'package:test_pack/features/auth_firebase/presentation/views/pages/phone_auth_screen.dart';
 import 'package:test_pack/features/auth_firebase/presentation/views/pages/reset_password_screen.dart';
@@ -25,6 +27,7 @@ abstract class AppRouter {
   static const kFirebaseMailAuthView = '/firebaseMailAuth';  
   static const kFirebaseFacebookAuthView = '/firebaseFacebookAuth';
   static const kFirebaseResetPasswordView = '/firebaseResetPassword';
+  static const kFirebaseGoogleAuthView = '/firebaseGoogleAuth';
 
   static final router = GoRouter(
     routes: [
@@ -63,14 +66,22 @@ abstract class AppRouter {
         builder: (context, state) => const MailAuthScreen(),
       ),
 
-            GoRoute(
-        path: kFirebaseFacebookAuthView,
-        builder: (context, state) => const MailAuthScreen(),
-      ),
+      
             GoRoute(
         path: kFirebaseResetPasswordView,
         builder: (context, state) => const ResetPasswordScreen(),
       ),
+
+            GoRoute(
+        path: kFirebaseFacebookAuthView,
+        builder: (context, state) => const FacebookAuthScreen(),
+      ),
+
+       GoRoute(
+        path: kFirebaseGoogleAuthView,
+        builder: (context, state) => const GoogleAuthScreen(),
+      ),
+
     ],
   );
 }

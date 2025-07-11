@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:test_pack/cores/errors/firebase_errors.dart';
 
 class FirebaseServices {
@@ -139,50 +141,53 @@ class FirebaseServices {
     );
   }
 
- Future signInWithEmail({
-  required String email,
-  required String password,
-}) async {
-  final completer = Completer();
+  Future signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    final completer = Completer();
 
-  try {
-    final userCredential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
 
-// to verify the email address
-    final user = userCredential.user;
+      // to verify the email address
+      final user = userCredential.user;
 
-    if (user != null && user.emailVerified) {
-      if (!completer.isCompleted) {
-        completer.complete("success");
+      if (user != null && user.emailVerified) {
+        if (!completer.isCompleted) {
+          completer.complete("success");
+        }
+      } else {
+        // Email not verified
+
+        await FirebaseAuth.instance.signOut();
+        if (!completer.isCompleted) {
+          completer.completeError(
+            FirebaseFailure("Email not verified. Please check your inbox."),
+          );
+        }
       }
-    } else {
-      // Email not verified
-
-      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
       if (!completer.isCompleted) {
-        completer.completeError(FirebaseFailure("Email not verified. Please check your inbox."));
+        completer.completeError(FirebaseFailure(e.code.toString()));
+      }
+    } catch (e) {
+      if (!completer.isCompleted) {
+        completer.completeError(FirebaseFailure(e.toString()));
       }
     }
-  } on FirebaseAuthException catch (e) {
-    if (!completer.isCompleted) {
-      completer.completeError(FirebaseFailure(e.code.toString()));
-    }
-  } catch (e) {
-    if (!completer.isCompleted) {
-      completer.completeError(FirebaseFailure(e.toString()));
-    }
+
+    return await completer.future.timeout(
+      const Duration(seconds: 65),
+      onTimeout: () {
+        throw FirebaseFailure("Request timed out");
+      },
+    );
   }
 
-  return await completer.future.timeout(
-    const Duration(seconds: 65),
-    onTimeout: () {
-      throw FirebaseFailure("Request timed out");
-    },
-  );
-}
-
-
+  /// ****************** NOT CLEAN ARCH FROM HERE ******************************
+  // Just from here to cubit to ui
   Future<String> resetPassword({required String email}) async {
     try {
       log(email);
@@ -233,6 +238,7 @@ class FirebaseServices {
     }
   }
 
+  // verfyEmail
   Future<String> verfyEmail() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -248,4 +254,68 @@ class FirebaseServices {
     }
     return "No user found";
   }
+
+
+//facebook sign in
+Future<String> signInWithFacebook() async {
+  try {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    log("loginResult $loginResult");
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    log("facebookAuthCredential $facebookAuthCredential");
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    log("success facebook login");
+    return "success";
+  } catch (e) {
+    log("failed facebook login");
+    return (FirebaseFailure(e.toString()).message);
+  }
 }
+
+Future<String> signInWithGoogle() async {
+  /*
+  try {
+      // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+   await FirebaseAuth.instance.signInWithCredential(credential);
+   log("success google login");
+   return "success";
+
+  } catch (e) {
+    log("failed google login");
+    return (FirebaseFailure(e.toString()).message);
+
+  }
+*/
+return "success google login";
+
+}
+
+
+}
+// keytool -exportcert -alias androiddebugkey -keystore "C:\Users\USERNAME\.android\debug.keystore" | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" sha1 -binary | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" base64
+      
+/**
+ * 
+ * keytool -list -v -keystore "C:\Users\"Your-User-Name(no quotes)"\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+ * 
+ */
+// 22:AE:4B:E7:25:36:74:51:AF:23:3F:29:D8:8E:7F:EF:1D:0A:51:52
+// EKXEXZZFGZ2FDLZDH4U5RDT754OQUUKS

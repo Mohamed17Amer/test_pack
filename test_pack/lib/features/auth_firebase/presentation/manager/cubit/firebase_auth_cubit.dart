@@ -81,4 +81,25 @@ class FirebaseAuthCubit extends Cubit<FirebaseAuthState> {
       emit((FirebaseFailureFailureState(result)));
     }
   }
+
+  Future<void>signInWithFacebook()async{
+    emit(FirebaseAuthLoadingState());
+    var result = await firebaseServices.signInWithFacebook();
+    if (result == "success") {
+      emit((FirebaseAuthFacebookSuccessState()));
+    } else {
+      emit((FirebaseAuthFacebookFailureState(result)));
+    }
+   
+  }
+  Future<void>signInWithGoogle()async{
+    emit(FirebaseAuthLoadingState());
+    var result = await firebaseServices.signInWithFacebook();
+    if (result == "success") {
+      emit((FirebaseAuthFacebookSuccessState()));
+    } else {
+      emit((FirebaseAuthFacebookFailureState(result)));
+    }
+   
+  }
 }
