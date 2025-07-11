@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:test_pack/cores/errors/firebase_errors.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseServices {
   TextEditingController loginPhoneNumberController = TextEditingController();
@@ -255,63 +255,71 @@ class FirebaseServices {
     return "No user found";
   }
 
+  //facebook sign in
+  Future<String> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+      log("loginResult $loginResult");
 
-//facebook sign in
-Future<String> signInWithFacebook() async {
-  try {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    log("loginResult $loginResult");
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      log("facebookAuthCredential $facebookAuthCredential");
 
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-    log("facebookAuthCredential $facebookAuthCredential");
-
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    log("success facebook login");
-    return "success";
-  } catch (e) {
-    log("failed facebook login");
-    return (FirebaseFailure(e.toString()).message);
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      log("success facebook login");
+      return "success";
+    } catch (e) {
+      log("failed facebook login");
+      return (FirebaseFailure(e.toString()).message);
+    }
   }
-}
 
-
-//google sign in
-Future<String> signInWithGoogle() async {
-  /*
-  try {
+  //google sign in
+  Future<String> signInWithGoogle() async {
+    try {
       // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return "user cancelled";
+      }
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-  // Once signed in, return the UserCredential
-   await FirebaseAuth.instance.signInWithCredential(credential);
-   log("success google login");
-   return "success";
-
-  } catch (e) {
-    log("failed google login");
-    return (FirebaseFailure(e.toString()).message);
-
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      log("success google login");
+      return "success";
+    } catch (e) {
+      log("failed google login");
+      return (FirebaseFailure(e.toString()).message);
+    }
   }
-*/
-return "success google login";
 
+  Future<String> signOtFromGoogle() async {
+    try {
+      GoogleSignIn().disconnect();
+      FirebaseAuth.instance.signOut();
+      log("success google logout");
+      return "success";
+    } catch (e) {
+      log("failed google logout");
+      return (FirebaseFailure(e.toString()).message);
+    }
+  }
 }
 
 
-}
 // keytool -exportcert -alias androiddebugkey -keystore "C:\Users\USERNAME\.android\debug.keystore" | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" sha1 -binary | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" base64
       
 /**
@@ -320,4 +328,5 @@ return "success google login";
  * 
  */
 // 22:AE:4B:E7:25:36:74:51:AF:23:3F:29:D8:8E:7F:EF:1D:0A:51:52
+// SHA256: EB:73:FE:2C:B6:1D:D9:52:00:BE:47:56:18:99:3A:97:6D:0C:CA:6C:7C:C7:7E:AD:87:B0:00:F2:36:95:45:F3
 // EKXEXZZFGZ2FDLZDH4U5RDT754OQUUKS
